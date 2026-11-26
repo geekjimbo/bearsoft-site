@@ -58,7 +58,7 @@ Do them in this order. None of them needs a credit card.
 
 1. **Booking page (Google Calendar, jimmy@bearsoft.ai).** In Calendar, create an *Appointment schedule* named **"Bearsoft · Intro call"**.
    - Length: **15 or 20 minutes** (never 30).
-   - Hours: **TBD**. Placeholder is **Mon–Fri 9:00–13:00 US Eastern**.
+   - Hours: **Mon–Fri 8:00 AM–6:00 PM US Central**. Set the schedule's time zone to *Central Time – Chicago* so it follows CST/CDT automatically.
    - Suggested: 10-minute buffer, at least 24 h notice, Google Meet on.
    - Booking form: name, email, and one question: "What are you trying to ship?"
    - Title and description must say **Bearsoft** only.
