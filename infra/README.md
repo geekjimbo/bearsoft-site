@@ -30,25 +30,25 @@ No DNS changes at GoDaddy are needed. The Google Workspace email records are not
 
 ## Feature flags (what is live right now)
 
-As of 26 November 2026, the live site shows only **Chat on WhatsApp** (the primary button) and the email link on the customer side, and an **"Email us your GitHub & LinkedIn"** mailto button on the engineer side. **Book a call** and **Continue with GitHub** stay in the markup but are switched off.
+As of 26 November 2026, the live site shows **Book a call** (the primary button, Google Calendar booking page), **Chat on WhatsApp**, and the email link on the customer side, and an **"Email us your GitHub & LinkedIn"** mailto button on the engineer side. **Continue with GitHub** stays in the markup but is switched off.
 
 There are two switches in `index.html`:
 
-1. **Flags** on the contact section: `<section … id="contact" data-booking="off" data-github="off">`
-2. **URLs** in the `CONTACT_CONFIG` constant near the bottom of the file: `bookingUrl: ''` and `workerUrl: ''`
+1. **Flags** on the contact section: `<section … id="contact" data-booking="on" data-github="off">`
+2. **URLs** in the `CONTACT_CONFIG` constant near the bottom of the file: `bookingUrl: 'https://calendar.app.google/zigT53HotYo2Ujdk9'` and `workerUrl: ''`
 
 A feature shows only when **both** its flag is `"on"` **and** its URL is set. If either one is missing, the JavaScript forces the flag back to `off`. A half-configured feature therefore can never show a dead button.
 
 | Flag | When `off` (now) | When `on` |
 |---|---|---|
-| `data-booking` | Book a call hidden; WhatsApp is the solid primary button; intro reads "Message us on WhatsApp…" | Book a call is primary (link from `bookingUrl`); WhatsApp goes back to the outlined button |
+| `data-booking` | Book a call hidden; WhatsApp is the solid primary button; intro reads "Message us on WhatsApp…" | Book a call is primary (link from `bookingUrl`); WhatsApp goes back to the outlined button. **On now.** |
 | `data-github` | GitHub panel, LinkedIn/note fields, consent line and the `#thanks`/`#error` messages hidden; shows the "Email us your GitHub & LinkedIn" mailto (`subject=Join Bearsoft`) | Continue with GitHub form posts to `workerUrl + /auth/github/start`; the mailto fallback is hidden |
 
 The CSS classes that drive this are `.if-booking`, `.if-booking-off`, `.if-github` and `.if-github-off`.
 
 ### Switching features on
 
-- **Booking:** finish setup step 1, put the link in `CONTACT_CONFIG.bookingUrl`, and set `data-booking="on"`.
+- **Booking:** done. The live site uses `https://calendar.app.google/zigT53HotYo2Ujdk9` and `data-booking="on"`.
 - **GitHub:** finish steps 2–5, put `https://bearsoft-connect.<subdomain>.workers.dev` in `CONTACT_CONFIG.workerUrl`, and set `data-github="on"`.
 - Then test on desktop and mobile before pushing to `main`.
 
@@ -56,13 +56,12 @@ The CSS classes that drive this are `.if-booking`, `.if-booking-off`, `.if-githu
 
 Do them in this order. None of them needs a credit card.
 
-1. **Booking page (Google Calendar, jimmy@bearsoft.ai).** In Calendar, create an *Appointment schedule* named **"Bearsoft · Intro call"**.
-   - Length: **15 or 20 minutes** (never 30).
-   - Hours: **Mon–Fri 8:00 AM–6:00 PM US Central**. Set the schedule's time zone to *Central Time – Chicago* so it follows CST/CDT automatically.
-   - Suggested: 10-minute buffer, at least 24 h notice, Google Meet on.
-   - Booking form: name, email, and one question: "What are you trying to ship?"
-   - Title and description must say **Bearsoft** only.
-   - Copy the booking page link into `CONTACT_CONFIG.bookingUrl` and set `data-booking="on"` (see *Feature flags*).
+1. **Booking page — done.** Google Calendar appointment schedule **"Bearsoft · Intro call"** is live at https://calendar.app.google/zigT53HotYo2Ujdk9.
+   - It lives on **jimmy@thebearsoft.com** (`jimmy@bearsoft.ai` is an alias of that Workspace account, not a sign-in of its own).
+   - Length: **20 minutes** (never 30). Hours: **Mon–Fri 8:00 AM–6:00 PM US Central** (time zone *Central Time – Chicago*).
+   - 10-minute buffer, 24 h minimum notice, Google Meet on. Booking form includes "What are you trying to ship?"
+   - The free Google plan allows only one booking page, so the old **"30 min with Jimmy"** page was converted into this one. Anyone with the old link now lands on the Bearsoft intro call.
+   - The site has the link in `CONTACT_CONFIG.bookingUrl` and `data-booking="on"`.
 2. **GitHub OAuth App in the `bearsoft-ai` org.** First make sure `geekjimbo` is an **owner** of https://github.com/bearsoft-ai. Then go to Org → Settings → Developer settings → OAuth Apps → *New OAuth App* and enter:
    - Application name: **Bearsoft**
    - Homepage URL: `https://bearsoft.ai`
