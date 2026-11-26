@@ -28,16 +28,29 @@ bearsoft.ai (GitHub Pages, static)
 
 No DNS changes at GoDaddy are needed. The Google Workspace email records are not touched.
 
-## Placeholders in the site
+## Feature flags (what is live right now)
 
-`index.html` has two placeholders, each in the `CONTACT_CONFIG` constant near the bottom of the file and in one fallback `href`/`action` (so it also works without JavaScript). Replace both occurrences of each:
+As of 26 November 2026, the live site shows only **Chat on WhatsApp** (the primary button) and the email link on the customer side, and an **"Email us your GitHub & LinkedIn"** mailto button on the engineer side. **Book a call** and **Continue with GitHub** stay in the markup but are switched off.
 
-| Placeholder | Replace with |
-|---|---|
-| `https://calendar.app.google/REPLACE_WITH_BOOKING_LINK` | the Google Calendar booking page link (step 1) |
-| `REPLACE_WITH_CF_SUBDOMAIN` | your Cloudflare workers.dev subdomain (step 3) |
+There are two switches in `index.html`:
 
-`grep -n REPLACE_WITH index.html` must return nothing before merging.
+1. **Flags** on the contact section: `<section … id="contact" data-booking="off" data-github="off">`
+2. **URLs** in the `CONTACT_CONFIG` constant near the bottom of the file: `bookingUrl: ''` and `workerUrl: ''`
+
+A feature shows only when **both** its flag is `"on"` **and** its URL is set. If either one is missing, the JavaScript forces the flag back to `off`. A half-configured feature therefore can never show a dead button.
+
+| Flag | When `off` (now) | When `on` |
+|---|---|---|
+| `data-booking` | Book a call hidden; WhatsApp is the solid primary button; intro reads "Message us on WhatsApp…" | Book a call is primary (link from `bookingUrl`); WhatsApp goes back to the outlined button |
+| `data-github` | GitHub panel, LinkedIn/note fields, consent line and the `#thanks`/`#error` messages hidden; shows the "Email us your GitHub & LinkedIn" mailto (`subject=Join Bearsoft`) | Continue with GitHub form posts to `workerUrl + /auth/github/start`; the mailto fallback is hidden |
+
+The CSS classes that drive this are `.if-booking`, `.if-booking-off`, `.if-github` and `.if-github-off`.
+
+### Switching features on
+
+- **Booking:** finish setup step 1, put the link in `CONTACT_CONFIG.bookingUrl`, and set `data-booking="on"`.
+- **GitHub:** finish steps 2–5, put `https://bearsoft-connect.<subdomain>.workers.dev` in `CONTACT_CONFIG.workerUrl`, and set `data-github="on"`.
+- Then test on desktop and mobile before pushing to `main`.
 
 ## Setup steps that need Jimmy
 
@@ -49,7 +62,7 @@ Do them in this order. None of them needs a credit card.
    - Suggested: 10-minute buffer, at least 24 h notice, Google Meet on.
    - Booking form: name, email, and one question: "What are you trying to ship?"
    - Title and description must say **Bearsoft** only.
-   - Copy the booking page link and paste it into `index.html` (two places, see above).
+   - Copy the booking page link into `CONTACT_CONFIG.bookingUrl` and set `data-booking="on"` (see *Feature flags*).
 2. **GitHub OAuth App in the `bearsoft-ai` org.** First make sure `geekjimbo` is an **owner** of https://github.com/bearsoft-ai. Then go to Org → Settings → Developer settings → OAuth Apps → *New OAuth App* and enter:
    - Application name: **Bearsoft**
    - Homepage URL: `https://bearsoft.ai`
@@ -81,7 +94,7 @@ Do them in this order. None of them needs a credit card.
    npm test && npx wrangler deploy
    ```
    Check it with `curl https://bearsoft-connect.<subdomain>.workers.dev/health`, which should return `ok`.
-6. **Point the site at the Worker.** Replace `REPLACE_WITH_CF_SUBDOMAIN` in `index.html` (two places). Make sure the OAuth App callback URL matches exactly.
+6. **Point the site at the Worker and switch it on.** Set `CONTACT_CONFIG.workerUrl` and `data-github="on"` (see *Feature flags*). Make sure the OAuth App callback URL matches exactly.
 7. **WhatsApp Business (recommended).** Move +506 7221 0087 to the free WhatsApp Business app.
    - Profile name: **Bearsoft**.
    - Set a greeting message, an away message, and business hours that match the booking page.
@@ -92,13 +105,12 @@ Do them in this order. None of them needs a credit card.
    - Continue with GitHub lands on `#thanks`, a row appears in the Sheet, and the alert email arrives.
    - Cancelling on GitHub lands on `#error`.
 
-## Before merging to `main` (flagged)
+## Still open (flagged)
 
 - **GDPR Art. 27:** Bearsoft Inc is a US controller that offers services to people in the EU. Check whether it must appoint an EU representative. If so, add the representative's details to `privacy.html` in EN and ES (there's a TODO comment in the file).
 - **Google Fonts:** the site loads fonts from `fonts.googleapis.com`, which sends visitors' IP addresses to Google. Self-hosting the three font families would avoid this. Otherwise, mention Google Fonts in `privacy.html`.
 - **Footer line "We build Sovereign by Design."** This is existing copy, unchanged by this branch. It names the credo house, so it relates to Open decision #5 and the house rule.
 - **`<meta name="robots" content="noindex">`** is set on `index.html` and `privacy.html`. Remove it when the site should be indexed.
-- **Placeholders:** `grep REPLACE_WITH index.html` must return nothing.
 
 ## Local checks
 
