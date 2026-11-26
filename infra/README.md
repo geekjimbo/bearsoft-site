@@ -82,7 +82,7 @@ Do them in this order. None of them needs a credit card.
    - Run `setup` once and authorize it.
    - Deploy → New deployment → **Web app**, Execute as *Me*, Who has access *Anyone*. Copy the `/exec` URL.
    - If the Workspace admin console blocks "Anyone" access for web apps, allow it for this script.
-   - Optional: add a monthly time-driven trigger for `purgeOld`, which handles 24-month retention.
+   - Optional: add a daily time-driven trigger for `purgeOld`, which handles 24-month retention.
 5. **Secrets and deploy the Worker.** From `infra/worker`:
    ```bash
    npx wrangler secret put GITHUB_CLIENT_ID

@@ -88,7 +88,7 @@ function setup() { sheet_(); }
 
 /**
  * Retention: delete engineer rows older than RETENTION_DAYS (default 730 = 24 months).
- * Add a time-driven trigger (monthly) in Triggers to run this automatically.
+ * Add a time-driven trigger (daily) in Triggers to run this automatically.
  * Note: this uses the row's submission date; extend it to "last contact" if you add that column.
  */
 function purgeOld() {

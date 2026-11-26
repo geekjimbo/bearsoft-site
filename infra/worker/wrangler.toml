@@ -2,6 +2,7 @@ name = "bearsoft-connect"
 main = "src/index.js"
 compatibility_date = "2026-11-01"
 workers_dev = true
+account_id = "8ca49d69c1be19f026a4ee0b1e48a7df"
 
 [vars]
 SITE_URL = "https://bearsoft.ai/"
