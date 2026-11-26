@@ -104,11 +104,14 @@ Do them in this order. None of them needs a credit card.
    - Continue with GitHub lands on `#thanks`, a row appears in the Sheet, and the alert email arrives.
    - Cancelling on GitHub lands on `#error`.
 
+## Decided
+
+- Typefaces are self-hosted in `assets/fonts/`. The privacy notice states that no third-party font requests are made.
+- Footer line: "We build Sovereign AI by Design."
+
 ## Still open (flagged)
 
 - **GDPR Art. 27:** Bearsoft Inc is a US controller that offers services to people in the EU. Check whether it must appoint an EU representative. If so, add the representative's details to `privacy.html` in EN and ES (there's a TODO comment in the file).
-- **Google Fonts:** the site loads fonts from `fonts.googleapis.com`, which sends visitors' IP addresses to Google. Self-hosting the three font families would avoid this. Otherwise, mention Google Fonts in `privacy.html`.
-- **Footer line "We build Sovereign by Design."** This is existing copy, unchanged by this branch. It names the credo house, so it relates to Open decision #5 and the house rule.
 - **`<meta name="robots" content="noindex">`** is set on `index.html` and `privacy.html`. Remove it when the site should be indexed.
 
 ## Local checks
